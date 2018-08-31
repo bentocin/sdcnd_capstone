@@ -9,9 +9,9 @@ ONE_MPH = 0.44704
 
 class Controller(object):
     def __init__(self, vehicle_mass, fuel_capacity, brake_deadband, decel_limit,
-        accel_limit, wheel_radius, wheel_base, steer_ratio, max_lat_accel, max_steer_angle):
+        accel_limit, wheel_radius, wheel_base, steer_ratio, max_lat_accel, max_steer_angle, dbw_frequency):
 
-        # Set up controller for steering
+        # Set up controller for steering with min_speed 0.1
         self.yaw_controller = YawController(wheel_base, steer_ratio, 0.1, max_lat_accel, max_steer_angle)
 
         # Set up controller for throttle
@@ -26,7 +26,7 @@ class Controller(object):
         # Set up low pass filter
         # It is filtering out the high frequency noise of the current_vel
         tau = 0.5   # 1/(2pi * tau) = cutoff frequency
-        ts = 0.02   # Sample time
+        ts = 1./dbw_frequency   # Sample time
         self.vel_lpf = LowPassFilter(tau, ts)
 
         self.vehicle_mass = vehicle_mass
